@@ -3,3 +3,8 @@ node_modules/
 .env
 *.local
 dist/
+images/
+__pycache__/
+*.pyc
+persian_ai_panel/__pycache__/
+persian_ai_panel/**/__pycache__/
