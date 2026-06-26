@@ -25,15 +25,7 @@ function corsResponse(body, init = {}) {
 export default {
   async fetch(request, env, ctx) {
     if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        status: 204,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-          'Access-Control-Max-Age': '86400'
-        }
-      });
+      return corsResponse({ ok: true }, { status: 204 });
     }
 
     try {
@@ -52,13 +44,19 @@ export default {
       if (url.pathname === '/webhook' || url.pathname === '/') {
         const reqValidation = await validateRequest(request);
         if (!reqValidation.valid) {
-          return corsResponse({ error: reqValidation.error }, { status: reqValidation.status });
+          return new Response(JSON.stringify({ error: reqValidation.error }), {
+            status: reqValidation.status,
+            headers: { 'Content-Type': 'application/json' }
+          });
         }
 
         const router = createRouter(env);
         const result = await router.handleWebhook(reqValidation.body);
 
-        return corsResponse(result.body, { status: result.status });
+        return new Response(JSON.stringify(result.body), {
+          status: result.status,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
       if (url.pathname === '/api/chat' && request.method === 'POST') {
@@ -66,7 +64,9 @@ export default {
           const body = await request.json();
           const message = body.message?.trim();
           if (!message) {
-            return corsResponse({ error: 'Message is required' }, { status: 400 });
+            return new Response(JSON.stringify({ error: 'Message is required' }), {
+              status: 400, headers: { 'Content-Type': 'application/json' }
+            });
           }
 
           const startTime = Date.now();
@@ -85,7 +85,7 @@ export default {
             ? cleanResponse(result.content)
             : 'متأسفانه سرویس هوش مصنوعی در حال حاضر در دسترس نیست.';
 
-          return corsResponse({
+          return new Response(JSON.stringify({
             response,
             model: result.model || 'unknown',
             latency_ms: Date.now() - startTime,
@@ -94,75 +94,104 @@ export default {
             compressed,
             tokens: result.estimatedTokens || 0,
             error: result.error || null
-          }, { status: 200 });
+          }), { status: 200, headers: { 'Content-Type': 'application/json' } });
         } catch (err) {
-          return corsResponse({ error: err.message }, { status: 400 });
+          return new Response(JSON.stringify({ error: err.message }), {
+            status: 400, headers: { 'Content-Type': 'application/json' }
+          });
         }
       }
 
       if (url.pathname === '/health') {
-        return corsResponse({
+        return new Response(JSON.stringify({
           status: 'ok',
           timestamp: new Date().toISOString()
-        }, { status: 200 });
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
       if (url.pathname === '/flow-logs') {
         const d1 = createD1Store(env.CHATBOT_DB);
         const limit = parseInt(url.searchParams.get('limit')) || 20;
         const results = await d1.getFlowLogs(limit);
-        return corsResponse(results, { status: 200 });
+        return new Response(JSON.stringify(results), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
       if (url.pathname === '/flow-stats') {
         const d1 = createD1Store(env.CHATBOT_DB);
         const stats = await d1.getFlowStats();
-        return corsResponse(stats, { status: 200 });
+        return new Response(JSON.stringify(stats), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
       if (url.pathname.startsWith('/flow/')) {
         const requestId = url.pathname.split('/')[2];
         if (!requestId) {
-          return corsResponse({ error: 'Missing request ID' }, { status: 400 });
+          return new Response(JSON.stringify({ error: 'Missing request ID' }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+          });
         }
         const d1 = createD1Store(env.CHATBOT_DB);
         const flow = await d1.getFlowById(requestId);
         if (!flow) {
-          return corsResponse({ error: 'Not found' }, { status: 404 });
+          return new Response(JSON.stringify({ error: 'Not found' }), {
+            status: 404,
+            headers: { 'Content-Type': 'application/json' }
+          });
         }
-        return corsResponse(flow, { status: 200 });
+        return new Response(JSON.stringify(flow), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
       if (url.pathname === '/set-webhook') {
         if (env.ALLOW_SET_WEBHOOK !== 'true') {
-          return corsResponse({ error: 'Not allowed' }, { status: 403 });
+          return new Response(JSON.stringify({ error: 'Not allowed' }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json' }
+          });
         }
 
         const webhookUrl = url.searchParams.get('url');
         if (!webhookUrl) {
-          return corsResponse({ error: 'Missing url parameter' }, { status: 400 });
+          return new Response(JSON.stringify({ error: 'Missing url parameter' }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+          });
         }
 
         const { createEitaaClient } = await import('./services/eitaa.js');
         const eitaa = createEitaaClient();
         const result = await eitaa.setWebhook(webhookUrl);
 
-        return corsResponse(result, { status: 200 });
+        return new Response(JSON.stringify(result), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
-      if (url.pathname === '/webhook-info') {
-        const { createEitaaClient } = await import('./services/eitaa.js');
-        const eitaa = createEitaaClient();
-        const info = await eitaa.getWebhookInfo();
-        return corsResponse(info, { status: 200 });
-      }
-
-      return corsResponse({ error: 'Not found' }, { status: 404 });
+      return new Response(JSON.stringify({ error: 'Not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' }
+      });
 
     } catch (error) {
-      return corsResponse({
+      return new Response(JSON.stringify({
         error: 'Internal server error'
-      }, { status: 500 });
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
   }
 };
+

@@ -14,6 +14,8 @@ import { cleanResponse } from './ai/responseCleaner.js';
 import { ERROR_MESSAGES } from './utils/constants.js';
 import { buildResponse, timestamp } from './utils/helpers.js';
 import { estimateTokens } from './utils/tokenizer.js';
+import { createKVStore } from './database/kv.js';
+import { createD1Store } from './database/d1.js';
 
 export function createRouter(env) {
   const eitaa = createEitaaClient();
@@ -21,8 +23,8 @@ export function createRouter(env) {
   const products = createProductService();
   const productSearch = createProductSearchService(products);
   const cache = createCacheService(env.CHATBOT_CACHE);
-  const kvStore = env.CHATBOT_KV;
-  const d1Store = env.CHATBOT_DB;
+  const kvStore = createKVStore(env.CHATBOT_KV);
+  const d1Store = createD1Store(env.CHATBOT_DB);
   const logger = createLogger(d1Store);
   const rateLimiter = createRateLimiter(kvStore);
   const requestLimiter = createRequestLimiter(kvStore);

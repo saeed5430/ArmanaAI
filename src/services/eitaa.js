@@ -39,6 +39,10 @@ export function createEitaaClient() {
       return callMethod('setWebhook', { url });
     },
 
+    async getWebhookInfo() {
+      return callMethod('getWebhookInfo');
+    },
+
     parseUpdate(body) {
       if (!body || !body.message) return null;
 
