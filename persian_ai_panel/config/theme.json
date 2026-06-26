@@ -1,0 +1,28 @@
+{
+  "light": {
+    "primary_color": "#4A90D9",
+    "secondary_color": "#2E5D8A",
+    "background_color": "#FFFFFF",
+    "surface_color": "#F5F7FA",
+    "text_color": "#1A1A2E",
+    "border_color": "#E0E6ED",
+    "card_background": "#FFFFFF",
+    "card_shadow": "rgba(0,0,0,0.1)",
+    "success_color": "#27AE60",
+    "error_color": "#E74C3C",
+    "warning_color": "#F39C12"
+  },
+  "dark": {
+    "primary_color": "#5DADE2",
+    "secondary_color": "#3498DB",
+    "background_color": "#1A1A2E",
+    "surface_color": "#16213E",
+    "text_color": "#ECF0F1",
+    "border_color": "#2C3E50",
+    "card_background": "#2C3E50",
+    "card_shadow": "rgba(0,0,0,0.3)",
+    "success_color": "#2ECC71",
+    "error_color": "#E74C3C",
+    "warning_color": "#F1C40F"
+  }
+}

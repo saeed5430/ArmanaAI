@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "app_name": "پنل مدیریت دستیار هوش مصنوعی",
+  "language": "fa",
+  "theme": "light",
+  "font_family": "Vazirmatn RD FD",
+  "font_size": 12,
+  "animation_speed": 300,
+  "auto_save_interval": 300,
+  "backup_interval": 86400,
+  "max_recent_files": 10,
+  "enable_notifications": true,
+  "debug_mode": false
+}

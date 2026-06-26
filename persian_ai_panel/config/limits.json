@@ -1,0 +1,19 @@
+{
+  "rate_limit": {
+    "requests_per_3_seconds": 1,
+    "enabled": true
+  },
+  "daily_limit": {
+    "max_requests": 200,
+    "max_input_tokens": 100000,
+    "enabled": true
+  },
+  "message_limit": {
+    "max_length": 1000,
+    "enabled": true
+  },
+  "token_limit": {
+    "max_input_tokens_per_request": 1000,
+    "enabled": true
+  }
+}

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت هوش مصنوعی فروشگاهی</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234A90D9'/><text x='50' y='65' text-anchor='middle' font-size='50' fill='white'>🤖</text></svg>">
+
+    <!-- Fonts -->
+    <style>
+        @font-face {
+            font-family: 'Hamishe';
+            src: url('assets/fonts/Hamishe/Hamishe-Regular.ttf') format('truetype');
+            font-weight: normal;
+        }
+        @font-face {
+            font-family: 'Hamishe';
+            src: url('assets/fonts/Hamishe/Hamishe-Bold.ttf') format('truetype');
+            font-weight: bold;
+        }
+        @font-face {
+            font-family: 'Hamishe';
+            src: url('assets/fonts/Hamishe/Hamishe-Light.ttf') format('truetype');
+            font-weight: 300;
+        }
+    </style>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Container -->
+    <div class="app-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">🤖</span>
+                    <div class="logo-text">
+                        <h2>پنل مدیریت</h2>
+                        <p>دستیار هوش مصنوعی</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">داشبورد</span>
+                </a>
+                <a href="#" class="nav-item" data-page="products">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">محصولات</span>
+                </a>
+                <a href="#" class="nav-item" data-page="excel">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">مدیریت اکسل</span>
+                </a>
+                <a href="#" class="nav-item" data-page="bot">
+                    <span class="nav-icon">🤖</span>
+                    <span class="nav-text">تنظیمات ربات</span>
+                </a>
+                <a href="#" class="nav-item" data-page="ai">
+                    <span class="nav-icon">🧠</span>
+                    <span class="nav-text">هوش مصنوعی</span>
+                </a>
+                <a href="#" class="nav-item" data-page="cloudflare">
+                    <span class="nav-icon">☁️</span>
+                    <span class="nav-text">Cloudflare</span>
+                </a>
+                <a href="#" class="nav-item" data-page="stats">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-text">آمار و گزارشات</span>
+                </a>
+                <a href="#" class="nav-item" data-page="logs">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-text">لاگ‌ها</span>
+                </a>
+                <a href="#" class="nav-item" data-page="backup">
+                    <span class="nav-icon">💾</span>
+                    <span class="nav-text">پشتیبان‌گیری</span>
+                </a>
+                <a href="#" class="nav-item" data-page="flow">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-text">Flow Tracer</span>
+                </a>
+                <a href="#" class="nav-item" data-page="chat">
+                    <span class="nav-icon">💬</span>
+                    <span class="nav-text">Chat Playground</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle">
+                    <span class="theme-icon">🌙</span>
+                    <span class="theme-text">حالت تاریک</span>
+                </button>
+                <div class="version-info">
+                    <span>نسخه 1.0.0</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <span>☰</span>
+                    </button>
+                    <div class="breadcrumb">
+                        <span>🏠</span>
+                        <span>/</span>
+                        <span id="currentPage">داشبورد</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="status-indicator online" id="botStatus">
+                        <span class="status-dot"></span>
+                        <span>ربات فعال</span>
+                    </div>
+                    <div class="user-menu">
+                        <button class="icon-button">🔔</button>
+                        <button class="icon-button">⚙️</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content" id="pageContent">
+
+                <!-- ==================== Dashboard Page ==================== -->
+                <div class="page active" id="dashboard-page">
+                    <div class="page-header">
+                        <h1>داشبورد مدیریت</h1>
+                        <p>خلاصه وضعیت سیستم و آمار لحظه‌ای</p>
+                    </div>
+
+                    <div class="stats-grid" id="dashboardStats">
+                        <div class="stat-card">
+                            <div class="stat-icon">🤖</div>
+                            <div class="stat-info">
+                                <h3>وضعیت ربات</h3>
+                                <p class="stat-value" id="dashBotStatus">در حال بررسی...</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🧠</div>
+                            <div class="stat-info">
+                                <h3>مدل فعال</h3>
+                                <p class="stat-value" id="activeModel">--</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📦</div>
+                            <div class="stat-info">
+                                <h3>تعداد محصولات</h3>
+                                <p class="stat-value" id="totalProducts">--</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-info">
+                                <h3>درخواست‌های امروز</h3>
+                                <p class="stat-value" id="todayRequests">--</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-info">
+                                <h3>توکن مصرفی</h3>
+                                <p class="stat-value" id="tokenUsage">--</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⚡</div>
+                            <div class="stat-info">
+                                <h3>میانگین پاسخ</h3>
+                                <p class="stat-value" id="avgResponse">--</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <h3>نمودار درخواست‌ها (۷ روز اخیر)</h3>
+                            <canvas id="requestsChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h3>مدل‌های استفاده شده</h3>
+                            <canvas id="modelsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== Products Page ==================== -->
+                <div class="page" id="products-page">
+                    <div class="page-header">
+                        <h1>مدیریت محصولات</h1>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="openAddProductModal()">➕ افزودن محصول</button>
+                            <button class="btn btn-secondary" onclick="exportProducts()">📥 خروجی اکسل</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-bar">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" placeholder="جستجوی محصول..." id="productSearch" oninput="filterProducts()">
+                        </div>
+                        <select class="filter-select" id="categoryFilter" onchange="filterByCategory()">
+                            <option value="">همه دسته‌ها</option>
+                            <option value="پوشاک">پوشاک</option>
+                            <option value="الکترونیک">الکترونیک</option>
+                            <option value="خانه">خانه و آشپزخانه</option>
+                            <option value="ورزشی">ورزشی</option>
+                            <option value="کتاب">کتاب</option>
+                        </select>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام محصول</th>
+                                    <th>دسته‌بندی</th>
+                                    <th>قیمت (تومان)</th>
+                                    <th>موجودی</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTableBody">
+                                <tr><td colspan="7" style="text-align:center">در حال بارگذاری...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ==================== Excel Page ==================== -->
+                <div class="page" id="excel-page">
+                    <div class="page-header">
+                        <h1>مدیریت اکسل</h1>
+                        <p>وارد کردن و مدیریت فایل اکسل محصولات</p>
+                    </div>
+
+                    <div class="excel-container">
+                        <div class="upload-section">
+                            <div class="upload-area" id="uploadArea">
+                                <div class="upload-icon">📁</div>
+                                <h3>فایل اکسل را اینجا رها کنید</h3>
+                                <p>یا کلیک کنید تا فایل انتخاب شود</p>
+                                <p class="upload-hint">فرمت‌های پشتیبانی شده: .xlsx, .xls</p>
+                                <input type="file" id="excelFileInput" accept=".xlsx,.xls" style="display:none" onchange="handleExcelUpload(event)">
+                                <button class="btn btn-primary" onclick="document.getElementById('excelFileInput').click()">📂 انتخاب فایل</button>
+                            </div>
+                        </div>
+
+                        <div class="excel-preview" id="excelPreview" style="display:none">
+                            <div class="preview-header">
+                                <h3>پیش‌نمایش فایل</h3>
+                                <div class="preview-actions">
+                                    <button class="btn btn-success" onclick="confirmImport()">✅ تایید و ذخیره</button>
+                                    <button class="btn btn-secondary" onclick="cancelImport()">❌ لغو</button>
+                                </div>
+                            </div>
+                            <div class="import-summary" id="importSummary"></div>
+                            <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+                                <table class="modern-table" id="excelPreviewTable">
+                                    <thead id="excelPreviewHead"></thead>
+                                    <tbody id="excelPreviewBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="excel-history">
+                            <h3>تاریخچه فایل‌ها</h3>
+                            <div class="table-container">
+                                <table class="modern-table">
+                                    <thead>
+                                        <tr>
+                                            <th>نام فایل</th>
+                                            <th>تاریخ</th>
+                                            <th>تعداد محصولات</th>
+                                            <th>وضعیت</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="excelHistoryBody">
+                                        <tr><td colspan="5" style="text-align:center">در حال بارگذاری...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== Bot Settings Page ==================== -->
+                <div class="page" id="bot-page">
+                    <div class="page-header">
+                        <h1>تنظیمات ربات</h1>
+                        <p>پیکربندی ربات ایتا</p>
+                    </div>
+
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>توکن ربات</label>
+                            <input type="password" id="botToken" placeholder="Bot Token">
+                            <button class="btn btn-secondary" onclick="testBotConnection()">🧪 تست اتصال</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Webhook URL</label>
+                            <input type="text" id="webhookUrl" readonly value="https://chatbot-scarf.abdollahi003.workers.dev">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Owner ID</label>
+                            <input type="text" id="ownerId" placeholder="شناسه مالک ربات">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ساعت شروع کار</label>
+                                <input type="time" id="workingStart" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label>ساعت پایان کار</label>
+                                <input type="time" id="workingEnd" value="22:00">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>پیام خوش‌آمدگویی</label>
+                            <textarea id="greetingMessage" rows="3">سلام! چطور می‌تونم کمکتون کنم؟</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>پیام خطا</label>
+                            <textarea id="errorMessage" rows="3">متأسفانه مشکلی پیش آمده. لطفاً دوباره تلاش کنید.</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="maintenanceMode">
+                                <span>حالت تعمیرات</span>
+                            </label>
+                        </div>
+
+                        <button class="btn btn-primary" onclick="saveBotSettings()">💾 ذخیره تنظیمات</button>
+                    </div>
+                </div>
+
+                <!-- ==================== AI Settings Page ==================== -->
+                <div class="page" id="ai-page">
+                    <div class="page-header">
+                        <h1>تنظیمات هوش مصنوعی</h1>
+                        <p>پیکربندی مدل و رفتار AI</p>
+                    </div>
+
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>مدل پیش‌فرض</label>
+                            <select id="defaultModel">
+                                <option value="deepseek/deepseek-chat-v2-free">DeepSeek Chat V2 (رایگان)</option>
+                                <option value="qwen/qwen-2-7b-instruct:free">Qwen 2 7B (رایگان)</option>
+                                <option value="google/gemma-2-9b-it:free">Gemma 2 9B (رایگان)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Temperature</label>
+                                <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7" oninput="updateTempLabel()">
+                                <span id="tempValue">0.7</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Max Tokens</label>
+                                <input type="number" id="maxTokens" value="500" min="50" max="2000">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>System Prompt</label>
+                            <textarea id="systemPrompt" rows="5">شما یک دستیار فروشگاهی حرفه‌ای و مودب هستید. لطفاً به سوالات مشتریان به فارسی پاسخ دهید. پاسخ‌ها باید کوتاه، مفید و دوستانه باشند.</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>حداکثر کلمات پاسخ</label>
+                            <input type="number" id="maxWords" value="40" min="10" max="200">
+                        </div>
+
+                        <button class="btn btn-primary" onclick="saveAISettings()">💾 ذخیره تنظیمات</button>
+                        <button class="btn btn-secondary" onclick="testAI()">🧪 تست AI</button>
+                    </div>
+                </div>
+
+                <!-- ==================== Cloudflare Page ==================== -->
+                <div class="page" id="cloudflare-page">
+                    <div class="page-header">
+                        <h1>تنظیمات Cloudflare</h1>
+                        <p>وضعیت Worker و تنظیمات</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🌐</div>
+                            <div class="stat-info">
+                                <h3>Worker Status</h3>
+                                <p class="stat-value online-text" id="workerStatus">در حال بررسی...</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📦</div>
+                            <div class="stat-info">
+                                <h3>KV Status</h3>
+                                <p class="stat-value" id="kvStatus">--</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🗄️</div>
+                            <div class="stat-info">
+                                <h3>D1 Status</h3>
+                                <p class="stat-value" id="d1Status">--</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>Worker URL</label>
+                            <input type="text" id="workerUrl" value="https://chatbot-scarf.abdollahi003.workers.dev" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label>API Token</label>
+                            <input type="password" id="cfApiToken" placeholder="Cloudflare API Token">
+                        </div>
+
+                        <button class="btn btn-primary" onclick="testConnection()">🧪 تست اتصال</button>
+                        <button class="btn btn-secondary" onclick="clearCache()">🗑️ پاک کردن Cache</button>
+                    </div>
+                </div>
+
+                <!-- ==================== Statistics Page ==================== -->
+                <div class="page" id="stats-page">
+                    <div class="page-header">
+                        <h1>آمار و گزارشات</h1>
+                        <p>تحلیل عملکرد ربات</p>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <h3>درخواست‌های روزانه</h3>
+                            <canvas id="dailyRequestsChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h3>مصرف توکن</h3>
+                            <canvas id="tokenUsageChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h3>مدل‌های استفاده شده</h3>
+                            <canvas id="modelUsageChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h3>میانگین زمان پاسخ</h3>
+                            <canvas id="responseTimeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="stats-details">
+                        <div class="detail-card">
+                            <h3>محصولات پرطرفدار</h3>
+                            <div id="topProducts"></div>
+                        </div>
+                        <div class="detail-card">
+                            <h3>کاربران فعال</h3>
+                            <div id="topUsers"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== Logs Page ==================== -->
+                <div class="page" id="logs-page">
+                    <div class="page-header">
+                        <h1>لاگ‌ها</h1>
+                        <div class="page-actions">
+                            <button class="btn btn-secondary" onclick="exportLogs()">📥 خروجی</button>
+                            <button class="btn btn-danger" onclick="clearLogs()">🗑️ پاک کردن</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-bar">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" placeholder="جستجو در لاگ‌ها..." id="logSearch" oninput="filterLogs()">
+                        </div>
+                        <select class="filter-select" id="logLevel" onchange="filterLogs()">
+                            <option value="">همه</option>
+                            <option value="INFO">INFO</option>
+                            <option value="ERROR">ERROR</option>
+                            <option value="WARNING">WARNING</option>
+                        </select>
+                        <input type="date" id="logDate" onchange="filterLogs()">
+                    </div>
+
+                    <div class="table-container">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>زمان</th>
+                                    <th>سطح</th>
+                                    <th>کاربر</th>
+                                    <th>ماژول</th>
+                                    <th>پیام</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTableBody">
+                                <tr><td colspan="5" style="text-align:center">در حال بارگذاری...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ==================== Backup Page ==================== -->
+                <div class="page" id="backup-page">
+                    <div class="page-header">
+                        <h1>پشتیبان‌گیری</h1>
+                        <p>مدیریت نسخه‌های پشتیبان</p>
+                    </div>
+
+                    <div class="backup-actions">
+                        <button class="btn btn-primary" onclick="createBackup()">💾 ایجاد پشتیبان جدید</button>
+                        <button class="btn btn-secondary" onclick="scheduleBackup()">⏰ زمان‌بندی خودکار</button>
+                    </div>
+
+                    <div class="backup-list">
+                        <h3>نسخه‌های پشتیبان</h3>
+                        <div class="table-container">
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>نام فایل</th>
+                                        <th>تاریخ</th>
+                                        <th>حجم</th>
+                                        <th>نوع</th>
+                                        <th>عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="backupTableBody">
+                                    <tr><td colspan="5" style="text-align:center">در حال بارگذاری...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== Chat Playground Page ==================== -->
+                <div class="page" id="chat-page">
+                    <div class="page-header">
+                        <h1>💬 Chat Playground</h1>
+                        <p>تست و عیب‌یابی هوش مصنوعی فروشگاه</p>
+                    </div>
+
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="chat-bubble bot">
+                                <div class="bubble-avatar">🤖</div>
+                                <div class="bubble-content">
+                                    <p>سلام! من دستیار هوشمند فروشگاه هستم. هر سوالی درباره محصولات داری بپرس.</p>
+                                    <span class="bubble-time">همین حالا</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-area">
+                            <div class="chat-input-wrapper">
+                                <textarea class="chat-input" id="chatInput" rows="1" placeholder="پیام خود را بنویسید..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMessage()}"></textarea>
+                                <button class="chat-send-btn" onclick="sendChatMessage()">➤</button>
+                            </div>
+                            <div class="chat-status" id="chatStatus"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== Flow Tracer Page ==================== -->
+                <div class="page" id="flow-page">
+                    <div class="page-header">
+                        <h1>📊 Request Flow Tracer</h1>
+                        <p>مسیر هر درخواست کاربر را ردیابی کنید</p>
+                    </div>
+
+                    <div class="stats-grid" id="flowStatsGrid">
+                        <div class="stat-card">
+                            <div class="stat-icon cache-icon">⚡</div>
+                            <div class="stat-info">
+                                <h3>Cache Hit</h3>
+                                <p class="stat-value" id="statCache">--</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon keyword-icon">✓</div>
+                            <div class="stat-info">
+                                <h3>Keyword Search</h3>
+                                <p class="stat-value" id="statKeyword">--</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon sql-icon">🧠</div>
+                            <div class="stat-info">
+                                <h3>Text-to-SQL</h3>
+                                <p class="stat-value" id="statSQL">--</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon failed-icon">❌</div>
+                            <div class="stat-info">
+                                <h3>Failed</h3>
+                                <p class="stat-value" id="statFailed">--</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <h3>توزیع مسیرها (امروز)</h3>
+                            <canvas id="flowDistributionChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h3>میانگین تاخیر هر مسیر</h3>
+                            <canvas id="flowLatencyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="flow-table-section">
+                        <div class="section-header">
+                            <h3>آخرین درخواست‌ها</h3>
+                            <button class="btn btn-secondary" onclick="refreshFlowLogs()">🔄 بروزرسانی</button>
+                        </div>
+                        <div class="table-container">
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>زمان</th>
+                                        <th>پرسش کاربر</th>
+                                        <th>مسیر</th>
+                                        <th>امتیاز</th>
+                                        <th>تاخیر (ms)</th>
+                                        <th>جزئیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="flowTableBody">
+                                    <tr><td colspan="6" style="text-align:center">در حال بارگذاری...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="flow-detail-panel" id="flowDetailPanel" style="display:none;">
+                        <div class="detail-header">
+                            <h3 id="detailTitle">جزئیات درخواست</h3>
+                            <button class="btn-icon" onclick="closeDetail()">✕</button>
+                        </div>
+                        <div class="detail-content">
+                            <div class="detail-section">
+                                <h4>📝 اطلاعات پایه</h4>
+                                <div class="detail-grid" id="detailBasic"></div>
+                            </div>
+                            <div class="detail-section">
+                                <h4>🗺️ مسیر طی شده</h4>
+                                <div class="flow-diagram" id="detailFlowDiagram"></div>
+                            </div>
+                            <div class="detail-section" id="detailSQLSection" style="display:none;">
+                                <h4>🗄️ SQL Generated</h4>
+                                <pre><code id="detailSQL"></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Container -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">عنوان مودال</h3>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal Content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/products.js"></script>
+    <script src="assets/js/flow.js"></script>
+    <script src="assets/js/chat.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

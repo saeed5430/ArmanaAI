@@ -1,0 +1,6 @@
+openrouter 
+serverless inference api hugging face
+bytez model api
+gemeni api 
+eden ai
+google cluade

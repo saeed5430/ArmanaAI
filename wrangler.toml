@@ -1,0 +1,28 @@
+name = "chatbot-scarf"
+main = "src/index.js"
+compatibility_date = "2025-04-01"
+
+[[kv_namespaces]]
+binding = "CHATBOT_KV"
+id = "ec099820da8842adaef6add3d163a537"
+preview_id = "ec099820da8842adaef6add3d163a537"
+
+[[kv_namespaces]]
+binding = "CHATBOT_CACHE"
+id = "6f643154650f4e46a3ee68d8427cb0f8"
+preview_id = "6f643154650f4e46a3ee68d8427cb0f8"
+
+[[d1_databases]]
+binding = "CHATBOT_DB"
+database_name = "chatbot-scarf-db"
+database_id = "14e6886e-81d8-43c6-9460-fd7579d47fe5"
+preview_database_id = "14e6886e-81d8-43c6-9460-fd7579d47fe5"
+
+[env.production]
+vars = { STORE_NAME = "فروشگاه من", ALLOW_SET_WEBHOOK = "false" }
+
+[env.production.triggers]
+crons = []
+
+[env.preview]
+vars = { STORE_NAME = "فروشگاه من (آزمایش)", ALLOW_SET_WEBHOOK = "true" }

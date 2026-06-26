@@ -1,0 +1,46 @@
+{
+  "default_model": "deepseek/deepseek-chat",
+  "models": [
+    {
+      "id": "deepseek/deepseek-chat",
+      "name": "DeepSeek Chat V2",
+      "provider": "DeepSeek",
+      "is_active": true,
+      "max_tokens": 8192
+    },
+    {
+      "id": "qwen/qwen-2.5-72b-instruct",
+      "name": "Qwen 2.5 72B",
+      "provider": "Alibaba",
+      "is_active": true,
+      "max_tokens": 4096
+    },
+    {
+      "id": "google/gemma-2-27b-it",
+      "name": "Gemma 2 27B",
+      "provider": "Google",
+      "is_active": true,
+      "max_tokens": 4096
+    },
+    {
+      "id": "microsoft/phi-3-mini-128k-instruct",
+      "name": "Phi-3 Mini",
+      "provider": "Microsoft",
+      "is_active": true,
+      "max_tokens": 4096
+    },
+    {
+      "id": "meta-llama/llama-3.1-8b-instruct",
+      "name": "Llama 3.1 8B",
+      "provider": "Meta",
+      "is_active": false,
+      "max_tokens": 4096
+    }
+  ],
+  "temperature": 0.7,
+  "max_tokens": 500,
+  "top_p": 0.9,
+  "system_prompt": "شما یک دستیار فروشگاهی حرفه‌ای و مودب هستید. لطفاً به سوالات مشتریان به فارسی پاسخ دهید. پاسخ‌ها باید کوتاه، مفید و دوستانه باشند.",
+  "compression_enabled": true,
+  "response_max_words": 40
+}

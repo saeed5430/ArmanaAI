@@ -1,0 +1,11 @@
+{
+  "bot_token": "",
+  "webhook_url": "https://your-worker.workers.dev",
+  "owner_id": "",
+  "admin_ids": [],
+  "working_hours_start": "08:00",
+  "working_hours_end": "22:00",
+  "maintenance_mode": false,
+  "default_greeting": "سلام! چطور می‌تونم کمکتون کنم؟",
+  "error_message": "متأسفانه مشکلی پیش آمده. لطفاً دوباره تلاش کنید."
+}

@@ -1,0 +1,53 @@
+export default {
+  MAX_REQUESTS: 5,
+  MAX_INPUT_TOKENS: 1000,
+  MAX_RESPONSE_WORDS: 40,
+  RATE_LIMIT_SECONDS: 3,
+  CACHE_TTL: 3600,
+  MODEL_TIMEOUT: 15000,
+  RETRY_MAX: 3,
+  RETRY_DELAY: 1000,
+  MAX_MESSAGE_LENGTH: 500,
+  RESET_HOURS: 24,
+  OPENROUTER_API_KEY: '',
+  OPENROUTER_BASE_URL: 'https://openrouter.ai/api/v1',
+  EITAA_BOT_TOKEN: '',
+  STORE_NAME: 'فروشگاه من',
+  PERSIAN_DIGITS: ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'],
+  LATIN_DIGITS: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+  FILLER_WORDS: [
+    'سلام', 'وقتتون بخیر', 'خوبی', 'چطوری', 'ممنون', 'مرسی', 'تشکر',
+    'لطفاً', 'لطفا', 'بفرمایید', 'بفرما', 'باشه', 'اوکی', 'حله',
+    'خواهش', 'عزیزم', 'دوست عزیز', 'کاربر', 'احوال', 'سلام علیکم',
+    'درود', 'عرض ادب', 'ارادتمند', 'سپاسگزارم', 'متشکرم'
+  ],
+  PERSIAN_NORMALIZE: {
+    'ي': 'ی',
+    'ك': 'ک',
+    'ة': 'ه',
+    'ۀ': 'ه',
+    '‌': ' ',
+    'ٔ': '',
+    'إ': 'ا',
+    'أ': 'ا'
+  },
+  PROMPT_INJECTION_PATTERNS: [
+    /ignore\s*(previous|all|above)\s*(instructions|prompts?|directions)/i,
+    /reveal\s*(your\s*)?(prompt|system\s*prompt|instructions?)/i,
+    /system\s*prompt/i,
+    /jailbreak/i,
+    /developer\s*mode/i,
+    /\bDAN\b/i,
+    /act\s*as\s*(?!.*(?:مشتری|فروشنده|کاربر))/i,
+    /simulate/i,
+    /do\s*anything\s*now/i,
+    /new\s*rules?/i,
+    /overr(i|y)de/i,
+    /ignore\s*(all\s*)?(rules?|constraints|limits|boundaries)/i,
+    /you\s*are\s*(not|free|unleashed|unbounded)/i,
+    /no\s*(restrictions?|limits?|boundaries?|rules?)/i,
+    /hypothetical\s*(scenario|situation)/i,
+    /role\s*play/i,
+    /narrative\s*(mode|style)/i
+  ]
+};
