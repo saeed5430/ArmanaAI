@@ -8,3 +8,5 @@ __pycache__/
 *.pyc
 persian_ai_panel/__pycache__/
 persian_ai_panel/**/__pycache__/
+temp.txt
+test_payload.json
